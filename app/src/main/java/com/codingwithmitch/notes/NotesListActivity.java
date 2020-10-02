@@ -1,6 +1,7 @@
 package com.codingwithmitch.notes;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -65,6 +66,9 @@ public class NotesListActivity extends AppCompatActivity implements NotesRecycle
     @Override
     public void onNoteClicked(int position) {
         Log.d(TAG, "onNoteClicked: for posiiton"+ position);
+
+        Intent intent = new Intent(this, NoteActivity.class);
+        startActivity(intent);
     }
 }
 

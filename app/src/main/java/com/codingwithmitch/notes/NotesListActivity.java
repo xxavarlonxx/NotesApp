@@ -1,16 +1,21 @@
 package com.codingwithmitch.notes;
 
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.codingwithmitch.notes.adapters.NotesRecyclerAdapter;
 import com.codingwithmitch.notes.models.Note;
 import com.codingwithmitch.notes.util.VerticalSpacingItemDecorator;
 
 import java.util.ArrayList;
 
-public class NotesListActivity extends AppCompatActivity {
+public class NotesListActivity extends AppCompatActivity implements NotesRecyclerAdapter.OnNoteListener {
 
     private static final String TAG = "NotesListActivity";
 
@@ -31,6 +36,9 @@ public class NotesListActivity extends AppCompatActivity {
 
         initRecyclerView();
         insertFakeNotes();
+
+        setSupportActionBar((Toolbar)findViewById(R.id.notes_toolbar));
+        setTitle("Notes");
     }
 
     private void insertFakeNotes(){
@@ -49,11 +57,15 @@ public class NotesListActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(linearLayoutManager);
         VerticalSpacingItemDecorator itemDecorator = new VerticalSpacingItemDecorator(10);
         mRecyclerView.addItemDecoration(itemDecorator);
-        mNoteRecyclerAdapter = new NotesRecyclerAdapter(mNotes);
+        mNoteRecyclerAdapter = new NotesRecyclerAdapter(mNotes, this);
         mRecyclerView.setAdapter(mNoteRecyclerAdapter);
     }
 
 
+    @Override
+    public void onNoteClicked(int position) {
+        Log.d(TAG, "onNoteClicked: for posiiton"+ position);
+    }
 }
 
 

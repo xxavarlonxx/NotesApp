@@ -17,7 +17,8 @@ import com.codingwithmitch.notes.models.Note;
 public class NoteActivity extends AppCompatActivity implements
         View.OnTouchListener,
         GestureDetector.OnGestureListener,
-        GestureDetector.OnDoubleTapListener{
+        GestureDetector.OnDoubleTapListener,
+        View.OnClickListener {
 
     private static final String TAG = "NoteActivity";
     private static final int EDIT_MODE_ENABLED = 1;
@@ -64,6 +65,8 @@ public class NoteActivity extends AppCompatActivity implements
     private void setListeners(){
         mLinedEditText.setOnTouchListener(NoteActivity.this);
         mGestureDetector = new GestureDetector(this,this);
+        mViewTitle.setOnClickListener(NoteActivity.this);
+        mCheck.setOnClickListener(NoteActivity.this);
     }
 
     private boolean getIncomingIntent(){
@@ -161,5 +164,33 @@ public class NoteActivity extends AppCompatActivity implements
     @Override
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
         return false;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.toolbar_check:{
+                disabledEditMode();
+                break;
+            }
+            case R.id.note_text_title:{
+                enabledEditMode();
+                mEditTitle.requestFocus();
+                mEditTitle.setSelection(mEditTitle.length());
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mMode == EDIT_MODE_ENABLED){
+            onClick(mCheck);
+        }else{
+            super.onBackPressed();
+        }
+
+
+
     }
 }

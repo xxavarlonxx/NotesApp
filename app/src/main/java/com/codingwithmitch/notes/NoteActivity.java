@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.codingwithmitch.notes.models.Note;
+import com.codingwithmitch.notes.persistence.NoteRepository;
 
 public class NoteActivity extends AppCompatActivity implements
         View.OnTouchListener,
@@ -38,6 +39,7 @@ public class NoteActivity extends AppCompatActivity implements
     private Note mInitialNote;
     private GestureDetector mGestureDetector;
     private int mMode;
+    private NoteRepository mNoteRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class NoteActivity extends AppCompatActivity implements
         mCheck = findViewById(R.id.toolbar_check);
         mBackArrow = findViewById(R.id.toolbar_back_arrow);
 
+        mNoteRepository = new NoteRepository(this);
 
         if(getIncomingIntent()) {
             //this is a new note (EDIT MODE)
@@ -84,6 +87,18 @@ public class NoteActivity extends AppCompatActivity implements
 
         mMode = EDIT_MODE_ENABLED;
         return true;
+    }
+
+    private void saveChanges(){
+        if(mIsNewNote){
+            saveNewNode();
+        }else{
+
+        }
+    }
+
+    private void saveNewNode(){
+        mNoteRepository.insertNoteTask(mInitialNote);
     }
 
     private void disableContentInteraction(){
@@ -124,6 +139,8 @@ public class NoteActivity extends AppCompatActivity implements
         mMode = EDIT_MODE_DISABLED;
 
         disableContentInteraction();
+
+        saveChanges();
     }
 
     private void hideSoftKeyboard(){
